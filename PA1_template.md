@@ -111,6 +111,7 @@ median(stepsPerDay)
 
 
 ```r
+library(lattice)
 wd<-weekdays(as.Date(data2$date))
 for (i in 1:length(wd)){
   if(wd[i]=="Monday"||wd[i]=="Tuesday"||wd[i]=="Wednesday"||wd[i]=="Thursday"||wd[i]=="Friday"){
@@ -121,11 +122,16 @@ for (i in 1:length(wd)){
 }
 
 data3<-cbind(wd,data2)
-sdata3<-split(data3,data3$interval)
-stepsPerInterval<-sapply(sdata3, function(x) mean(x$steps, na.rm=TRUE))
-interval<-data3$interval
-intervalUnique<-unique(interval)
-plot(stepsPerInterval~intervalUnique, type="l", xlab="5 min interval ID")
+dataByDay<-aggregate(data3$steps,by=list(data3$interval, data3$wd), FUN=mean)
+xyplot(dataByDay$x~dataByDay$Group.1|dataByDay$Group.2, type="l", xlab="5 min interal ID", ylab="No. of steps")
 ```
 
 ![](PA1_template_files/figure-html/unnamed-chunk-5-1.png) 
+
+```r
+#sdata3<-split(data3,data3$interval)
+#stepsPerInterval<-sapply(sdata3, function(x) mean(x$steps, na.rm=TRUE))
+#interval<-data3$interval
+#intervalUnique<-unique(interval)
+#plot(stepsPerInterval~intervalUnique, type="l", xlab="5 min interval ID")
+```
